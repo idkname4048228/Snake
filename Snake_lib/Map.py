@@ -65,7 +65,6 @@ class Map:
             self.block[selectBlock][2], self.block[selectBlock][3])
 
         self.pointPlace = [self.x_axis, self.y_axis]
-        print(self.pointPlace, tmp, selectBlock)
 
         while (self.pointPlace in self.snake.coordinate):
             self.x_axis = random.randint(
@@ -74,7 +73,6 @@ class Map:
                 self.block[selectBlock][2], self.block[selectBlock][3])
 
             self.pointPlace = [self.x_axis, self.y_axis]
-            print(self.pointPlace)
 
         self.point.set_place(self.pointPlace)
 
@@ -92,11 +90,15 @@ class Map:
             tmp.append([])
             for j in range(self.hightLimit):
                 tmp[i].append(0)
+        
+        if self.pointPlace in self.snake.coordinate:
+            self.snake.eat_point()
+            self.generate_point()
+
+        tmp[self.pointPlace[0]][self.pointPlace[1]] = 3
 
         for i in self.snake.coordinate:
             tmp[i[0]][i[1]] = 1
-
-        tmp[self.pointPlace[0]][self.pointPlace[1]] = 3
 
         for i in range(self.hightLimit - 1, -1, -1):
             for j in range(self.widthLimit):
