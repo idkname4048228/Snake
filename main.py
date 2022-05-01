@@ -1,6 +1,7 @@
 import os
 import time
-import threading
+import keyboard
+
 
 from Snake_lib.Map import Map
 from Snake_lib.Snake import Snake
@@ -8,41 +9,55 @@ from Snake_lib.Point import Point
 
 
 def main():
-    testSnake = Snake(5, 0, [0, 9])
+    testSnake = Snake(5, 3, [0, 9])
     testPoint = Point()
 
     testMap = Map(testSnake, testPoint)
-
+    
     direction = 0
 
     testSnake.change_direction(direction)
 
     def loop():
-        while True:
-            if testSnake.unit_move():
-                testMap.display()
-                time.sleep(0.2)
-                os.system("cls")
-            else:
-                return False
+        while testSnake.long != 10 and testSnake.alive:
+            testSnake.unit_move()
+            testMap.is_snake_die()
+            if not(testSnake.alive):
+                break
 
-    def change_direction_by_keyborad():
-        inputValue = int(input()) % 4
-        
-        while True:
+            testMap.display()
+            time.sleep(0.2)
+            os.system("cls")
+            testMap.is_snake_die()
 
-            testSnake.change_direction(inputValue)
-            inputValue = int(input()) % 4
+        if testSnake.long == 10:
+            print("Goal!!")
+        else:
+            print("Death")
 
-    thread_1 = threading.Thread(target=loop)  # 例項化一個執行緒物件，使執行緒執行這個函式
-    thread_2 = threading.Thread(target=change_direction_by_keyborad)  # 例項化一個執行緒物件，使執行緒執行這個函式
+    def change_direction_by_keyboard(pressKey):
+        global direction
+        if pressKey.event_type == 'down' and pressKey.name == 'right' and testSnake.directionCode != 2:
+            direction = 0
+            testSnake.change_direction(direction)
 
+        if pressKey.event_type == 'down' and pressKey.name == 'down' and testSnake.directionCode != 3:
+            direction = 1
+            testSnake.change_direction(direction)
 
-    thread_1.start()  # 啟動這個執行緒
-    thread_2.start()  # 啟動這個執行緒
-    thread_1.join()  # 等待thread_1結束，如果不打join程式會直接往下執行
-    thread_2.join()  # 等待thread_2結束，如果不打join程式會直接往下執行
+        if pressKey.event_type == 'down' and pressKey.name == 'left' and testSnake.directionCode != 0:
+            direction = 2
+            testSnake.change_direction(direction)
+
+        if pressKey.event_type == 'down' and pressKey.name == 'up' and testSnake.directionCode != 1:
+            direction = 3
+            testSnake.change_direction(direction)
+
+    keyboard.hook(change_direction_by_keyboard)
+
+    loop()
 
 
 if __name__ == '__main__':
     main()
+

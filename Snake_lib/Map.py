@@ -25,9 +25,9 @@ class Map:
     def set_snake(self, snake: Snake):
         self.snake = snake
 
-    def is_die(self) -> None:
-        if (self.snake.coordinate[0][0] > self.snake.location.width or
-            self.snake.coordinate[0][1] > self.snake.location.hight or
+    def is_snake_die(self) -> None:
+        if (self.snake.coordinate[0][0] >= self.widthLimit or
+            self.snake.coordinate[0][1] >= self.hightLimit or
             self.snake.coordinate[0][0] < 0 or
                 self.snake.coordinate[0][1] < 0):
             self.snake.set_alive(False)  # 死了
@@ -91,7 +91,7 @@ class Map:
             for j in range(self.hightLimit):
                 tmp[i].append(0)
         
-        if self.pointPlace in self.snake.coordinate:
+        if self.snake.coordinate[0] == self.pointPlace :
             self.snake.eat_point()
             self.generate_point()
 
@@ -99,11 +99,14 @@ class Map:
 
         for i in self.snake.coordinate:
             tmp[i[0]][i[1]] = 1
-
+        print("_______________________")
         for i in range(self.hightLimit - 1, -1, -1):
+            print("|", end = ' ')
             for j in range(self.widthLimit):
                 if tmp[j][i]:
                     print(tmp[j][i], end=' ')
                 else:
                     print(' ', end = ' ')
-            print()
+            print("|")
+        
+        print("_______________________")
