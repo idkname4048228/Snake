@@ -1,6 +1,8 @@
 import os
+import re
 import time
-import keyboard
+import keyboard 
+import threading
 
 
 from Snake_lib.Map import Map
@@ -9,7 +11,7 @@ from Snake_lib.Point import Point
 
 
 def main():
-    testSnake = Snake(5, 3, [0, 9])
+    testSnake = Snake(1, 3, [0, 9])
     testPoint = Point()
 
     testMap = Map(testSnake, testPoint)
@@ -20,17 +22,23 @@ def main():
 
     testMap.set_protal()
 
+    step = 1
+
+    def reduce_protalTime():
+        while testSnake.alive:
+            time.sleep(1)
+            testMap.reduce_protalTime()
+
     def loop():
-        while testSnake.long != 10 and testSnake.alive:
-            testSnake.unit_move()
+        while testSnake.long != 30 and testSnake.alive:
+            testSnake.multi_unit_move(step)
             testMap.is_snake_die()
             if not(testSnake.alive):
                 break
 
             testMap.display()
-            time.sleep(0.2)
+            time.sleep(0.4)
             os.system("cls")
-            testMap.is_snake_die()
 
         if testSnake.long == 10:
             print("Goal!!")
@@ -57,9 +65,17 @@ def main():
 
     keyboard.hook(change_direction_by_keyboard)
 
-    loop()
+    thread_reduce = threading.Thread(target=reduce_protalTime)  # 例項化一個執行緒物件，使執行緒執行這個函式
+    thread_loop = threading.Thread(target=loop)  # 例項化一個執行緒物件，使執行緒執行這個函式
+    
+    thread_reduce.start()
+    thread_loop.start()
 
+    thread_reduce.join()
+    thread_loop.join()
+    
 
 if __name__ == '__main__':
+
     main()
 

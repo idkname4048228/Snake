@@ -1,3 +1,4 @@
+import time
 import random
 from Snake_lib.Snake import Snake
 from Snake_lib.Point import Point
@@ -28,9 +29,9 @@ class Map:
     def set_protal(self):
         block = random.randint(0, 3)
         """
-            2
-        1   +   3
-            0
+            1
+        0   +   2
+            3
         """
         if block % 2:
             place = random.randint(0, self.middleOfWidth - 1)
@@ -51,7 +52,11 @@ class Map:
     def reduce_protalTime(self):
         self.protalTime -= 1
         if self.protalTime == 0:
+            
             self.inProtal, self.outProtal = [-1, -1], [-1, -1]
+            delay_time = random.randint(0, 5)
+            time.sleep(delay_time)
+            self.set_protal()
 
     def set_snake(self, snake: Snake):
         self.snake = snake
@@ -63,15 +68,26 @@ class Map:
             headCoordinate[0] < 0 or
                 headCoordinate[1] < 0):
             self.snake.set_alive(False)  # 死了
+            print("Wall")
+        elif self.snake.inProtal and self.protalTime == 0:
+            self.snake.set_alive(False)
+            print("Protal")
         else:
             self.snake.set_alive(True)  # 活著
 
-        if self.is_snake_in_protal():
+        if self.snake.nextInProtal != -1:
+            self.snake.nextInProtal += 1
+            if self.snake.nextInProtal == self.snake.long - 1:
+                
+                self.snake.inProtal = False
+                self.snake.nextInProtal = -1
+
+        if self.is_head_in_protal():
+            self.snake.inProtal = True
+            self.snake.nextInProtal = 1
             self.set_head_to_outprotal()
 
-        
-
-    def is_snake_in_protal(self):
+    def is_head_in_protal(self):
         headCoordinate = self.snake.coordinate[0]
         if headCoordinate[0] == -1:
             block = 0
@@ -106,8 +122,6 @@ class Map:
 
         elif self.outProtal[0] == 3:
             self.snake.coordinate[0] = [self.outProtal[1], 0]
-
-
 
     def set_point(self, point: Point):
         self.point = point
@@ -217,4 +231,4 @@ class Map:
                 print("¯¯¯", end = '')
         print('¯¯ ', end = '')
 
-        print("protal time = ", self.protalTime, self.inProtal, self.outProtal)
+        print("protal time =", self.protalTime, '\n', self.snake.nextInProtal, self.snake.long - 1,  self.snake.inProtal)

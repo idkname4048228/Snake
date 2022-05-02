@@ -9,6 +9,8 @@ class Snake:
         self.moveDirection = self.direction[self.directionCode]  # 面向方位
         self.coordinate = []  # 蛇整體座標
         self.alive = True
+        self.inProtal = False
+        self.nextInProtal = -1
 
         for i in range(long):
             self.coordinate.append([])
@@ -47,5 +49,6 @@ class Snake:
         for i in range(1, len(self.coordinate)):  # 頭撞身體
             if self.coordinate[0] == self.coordinate[i]:
                 isAlive = False
+                print("Body")
                 break
         self.alive = isAliveInMap and isAlive
