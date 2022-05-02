@@ -18,6 +18,8 @@ def main():
 
     testSnake.change_direction(direction)
 
+    testMap.set_protal()
+
     def loop():
         while testSnake.long != 10 and testSnake.alive:
             testSnake.unit_move()

@@ -37,6 +37,7 @@ class Snake:
         for i in range(distance):
             self.unit_move()
 
+
     def eat_point(self) -> None:  # 吃point，加長身體
         self.long += 1
         self.coordinate = self.coordinate + [self.lastSpace]

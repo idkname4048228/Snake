@@ -20,19 +20,94 @@ class Map:
         self.block_init()
         self.generate_point()
 
+        self.inProtal = [-1, -1]
+        self.outProtal = [-1, -1]
+        self.protalTime = 0
+
     # 傳送門(預想)
+    def set_protal(self):
+        block = random.randint(0, 3)
+        """
+            2
+        1   +   3
+            0
+        """
+        if block % 2:
+            place = random.randint(0, self.middleOfWidth - 1)
+        else:
+            place = random.randint(0, self.middleOfHight - 1)
+        self.inProtal = [block, place]
+
+        block = random.randint(0, 3)  # 設定出口座標，不跟入口重複
+        while place == self.inProtal[1]:
+            if block % 2:
+                place = random.randint(0, self.middleOfWidth - 1)
+            else:
+                place = random.randint(0, self.middleOfHight - 1)
+        self.outProtal = [block, place]
+
+        self.protalTime = random.randint(self.snake.long, self.snake.long + 10)
+
+    def reduce_protalTime(self):
+        self.protalTime -= 1
+        if self.protalTime == 0:
+            self.inProtal, self.outProtal = [-1, -1], [-1, -1]
 
     def set_snake(self, snake: Snake):
         self.snake = snake
 
     def is_snake_die(self) -> None:
-        if (self.snake.coordinate[0][0] >= self.widthLimit or
-            self.snake.coordinate[0][1] >= self.hightLimit or
-            self.snake.coordinate[0][0] < 0 or
-                self.snake.coordinate[0][1] < 0):
+        headCoordinate = self.snake.coordinate[0]
+        if (headCoordinate[0] >= self.widthLimit or
+            headCoordinate[1] >= self.hightLimit or
+            headCoordinate[0] < 0 or
+                headCoordinate[1] < 0):
             self.snake.set_alive(False)  # 死了
         else:
             self.snake.set_alive(True)  # 活著
+
+        if self.is_snake_in_protal():
+            self.set_head_to_outprotal()
+
+        
+
+    def is_snake_in_protal(self):
+        headCoordinate = self.snake.coordinate[0]
+        if headCoordinate[0] == -1:
+            block = 0
+        elif headCoordinate[1] == self.hightLimit:
+            block = 1
+        elif headCoordinate[0] == self.widthLimit:
+            block = 2
+        elif headCoordinate[1] == -1:
+            block = 3
+        else:
+            return False
+
+        if block % 2:
+            if [block, headCoordinate[0]] == self.inProtal:
+                self.snake.set_alive(True)
+
+        else:
+            if [block, headCoordinate[1]] == self.inProtal:
+                self.snake.set_alive(True)
+        return True
+
+    def set_head_to_outprotal(self):
+        self.snake.change_direction(self.outProtal[0])
+        if self.outProtal[0] == 0:
+            self.snake.coordinate[0] = [0, self.outProtal[1]]
+
+        elif self.outProtal[0] == 1:
+            self.snake.coordinate[0] = [self.outProtal[1], self.hightLimit - 1]
+
+        elif self.outProtal[0] == 2:
+            self.snake.coordinate[0] = [self.widthLimit - 1, self.outProtal[1]]
+
+        elif self.outProtal[0] == 3:
+            self.snake.coordinate[0] = [self.outProtal[1], 0]
+
+
 
     def set_point(self, point: Point):
         self.point = point
@@ -99,14 +174,47 @@ class Map:
 
         for i in self.snake.coordinate:
             tmp[i[0]][i[1]] = 1
-        print("_______________________")
+
+        print(' __', end = '')#上界線
+        for i in range(10):
+            if self.inProtal == [1, i]:#protal
+                print("(i)", end = '')
+            elif self.outProtal == [1, i]:
+                print("(o)", end = '')
+            else:
+                print("___", end = '')
+        print('__ ')
+
         for i in range(self.hightLimit - 1, -1, -1):
-            print("|", end = ' ')
+
+            if self.inProtal == [0, i]:#左界線
+                print("(i)", end = '')#protal
+            elif self.outProtal == [0, i]:
+                print("(o)", end = '')
+            else:
+                print(" | ", end = '')
+
             for j in range(self.widthLimit):
                 if tmp[j][i]:
-                    print(tmp[j][i], end=' ')
+                    print(' ', tmp[j][i], sep='', end=' ')
                 else:
-                    print(' ', end = ' ')
-            print("|")
+                    print('  ', end = ' ')
+
+            if self.inProtal == [2, i]:
+                print("(i)")#右界線
+            elif self.outProtal == [2, i]:
+                print("(o)")
+            else:
+                print(" | ")#protal
         
-        print("_______________________")
+        print(' ¯¯', end = '')#下界線
+        for i in range(10):
+            if self.inProtal == [3, i]:
+                print("(i)", end = '')#protal
+            elif self.outProtal == [3, i]:
+                print("(o)", end = '')
+            else:
+                print("¯¯¯", end = '')
+        print('¯¯ ', end = '')
+
+        print("protal time = ", self.protalTime, self.inProtal, self.outProtal)
