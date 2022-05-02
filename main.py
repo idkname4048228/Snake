@@ -22,7 +22,7 @@ def main():
 
     testMap.set_protal()
 
-    step = 1
+    step = testSnake.step
 
     def reduce_protalTime():
         while testSnake.alive:
@@ -31,7 +31,7 @@ def main():
 
     def loop():
         while testSnake.long != 30 and testSnake.alive:
-            testSnake.multi_unit_move(step)
+            testSnake.move()
             testMap.is_snake_die()
             if not(testSnake.alive):
                 break
@@ -47,19 +47,26 @@ def main():
 
     def change_direction_by_keyboard(pressKey):
         global direction
-        if pressKey.event_type == 'down' and pressKey.name == 'right' and testSnake.directionCode != 2:
+        if pressKey.event_type == 'down' and pressKey.name == 'shift':
+            if testSnake.step < 5:    
+                testSnake.step += 1
+        elif pressKey.event_type == 'down' and pressKey.name == 'right shift':
+            if testSnake.step > 1:
+                testSnake.step -= 1
+
+        elif pressKey.event_type == 'down' and pressKey.name == 'right' and testSnake.directionCode != 2:
             direction = 0
             testSnake.change_direction(direction)
 
-        if pressKey.event_type == 'down' and pressKey.name == 'down' and testSnake.directionCode != 3:
+        elif pressKey.event_type == 'down' and pressKey.name == 'down' and testSnake.directionCode != 3:
             direction = 1
             testSnake.change_direction(direction)
 
-        if pressKey.event_type == 'down' and pressKey.name == 'left' and testSnake.directionCode != 0:
+        elif pressKey.event_type == 'down' and pressKey.name == 'left' and testSnake.directionCode != 0:
             direction = 2
             testSnake.change_direction(direction)
 
-        if pressKey.event_type == 'down' and pressKey.name == 'up' and testSnake.directionCode != 1:
+        elif pressKey.event_type == 'down' and pressKey.name == 'up' and testSnake.directionCode != 1:
             direction = 3
             testSnake.change_direction(direction)
 

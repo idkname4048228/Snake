@@ -11,6 +11,7 @@ class Snake:
         self.alive = True
         self.inProtal = False
         self.nextInProtal = -1
+        self.step = 1
 
         for i in range(long):
             self.coordinate.append([])
@@ -35,8 +36,8 @@ class Snake:
         tmp[1] += self .moveDirection[1]
         self.coordinate = [tmp] + self.coordinate[0:self.long - 1:1]
 
-    def multi_unit_move(self, distance: int) -> None:  # 蛇移動
-        for i in range(distance):
+    def move(self) -> None:  # 蛇移動
+        for i in range(self.step):
             self.unit_move()
 
 
