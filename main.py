@@ -1,18 +1,22 @@
+"""
+for i in range(snake.step):
+    snake.move
+    if snake.have_eaten_point:
+        map.generate_point()
+"""
+
+
 import os
-import re
 import time
 import keyboard
 import threading
 
 
-from Snake_lib.Map import Map
-from Snake_lib.Snake import Snake
-from Snake_lib.Point import Point
+from Snake_lib.Map import Map, Snake
 
 
 def main():
     testSnake = Snake(1, 3, [0, 9])
-    testPoint = Point()
 
     testMap = Map(testSnake, testPoint)
 

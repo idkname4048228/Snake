@@ -1,20 +1,56 @@
 import time
 import random
 from Snake_lib.Snake import Snake
-from Snake_lib.Point import Point
+from Snake_lib.Protal import Protal
+"""
+Map 主要功能:
+    display 展示全地圖
+    generate_point  生成點數
+    
+    component 有 Snake, Protal
+    附加功能
+        set_boundary_to_snake   讓 snake 知道界線
+        set_point_to_snake  讓 snake 知道 point 座標
 
-
+        is_snake_in_protal  判斷 snake 是否在 protal 裡面
+        reduce_protalTime   減少 protalTime
+    
+    
+"""
 class Map:
     def __init__(
-        self, snake: Snake = None, point: Point = None, width: int = 10, hight: int = 10
+        self, width: int = 10, high: int = 10
+    ) -> None:
+        # 邊界預設皆為 10
+        self.__width = width
+        self.__high = high
+
+        # point 相關設定
+        self.__xAxisOfPoint = 0
+        self.__yAxisOfPoint = 0
+        self.__placeOfPoint = [self.__xAxisOfPoint, self.__yAxisOfPoint]
+
+    def set_snake(self, snake: Snake = None) -> None:
+        snake.set_boundary(self.__width, self.__high)
+        self.__snake = snake
+    
+    def set_protal(self, protal: Protal = None) -> None:
+        protal.set_boundary(self.__width, self.__high)
+        self.__protal = protal
+
+    def generate_point(self):
+        head = self.__snake.__head
+        
+
+""
+class Map:
+    def __init__(
+        self, width: int = 10, hight: int = 10
     ):
         self.widthLimit = width
         self.hightLimit = hight
         self.middleOfWidth = self.widthLimit // 2  # 為了亂數
         self.middleOfHight = self.hightLimit // 2
-
-        self.snake = snake
-        self.point = point
 
         self.x_axis = 0
         self.y_axis = 0
@@ -252,3 +288,4 @@ class Map:
             self.snake.long - 1,
             self.snake.inProtal,
         )
+""
