@@ -19,7 +19,7 @@ class Protal:
         self.__width, self.__high = 10, 10
 
         self.__interProtal = [self.__interSideline, self.__interPlaceIndex]
-        self.__exitProtal = [self.__exitProtal, self.__exitPlaceIndex]
+        self.__exitProtal = [self.__exitSideline, self.__exitPlaceIndex]
 
     def set_boundary(self, width: int = 10, high: int = 10) -> None:  # 設定界線
         self.__width = width
@@ -36,26 +36,25 @@ class Protal:
 
         self.__interProtal = [self.__interSideline, self.__interPlaceIndex]
 
-
         self.__exitProtal = self.__interProtal
         while self.__exitProtal == self.__interProtal:
-        #出口
+            # 出口
             self.__exitSideline = random.randint(0, 3)  # 隨機取 sideline
 
             if self.__exitSideline % 2:  # 如果是奇數，生成X軸的座標
                 self.__exitPlaceIndex = random.randint(0, self.__width - 1)
             else:  # 如果是偶數，生成Y軸的座標
                 self.__exitPlaceIndex = random.randint(0, self.__high - 1)
-            
+
             self.__exitProtal = [self.__exitSideline, self.__exitPlaceIndex]
 
     def get_inter_coordinate(self) -> list:  # 回傳入口座標
         return self.__interProtal
-    
+
     def get_exit_coordinate(self) -> list:  # 回傳出口座標
         return self.__exitProtal
 
-    def close(self) -> None:    #傳送門關閉
+    def close(self) -> None:  # 傳送門關閉
         self.__interSideline, self.__interPlaceIndex = -1, -1
         self.__exitSideline, self.__exitPlaceIndex = -1, -1
         self.__interProtal = [self.__interSideline, self.__interPlaceIndex]

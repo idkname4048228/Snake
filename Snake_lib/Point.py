@@ -19,11 +19,11 @@ class Point:
     def generate(self, bodyCoordinate: list[list]) -> None:  # 生成 point
         head = bodyCoordinate[0]  # 蛇頭
         block = 0  # 區塊
-        if head <= self.__width // 2:
+        if head[0] <= self.__width // 2:
             block += 0
         else:
             block += 1
-        if head <= self.__high // 2:
+        if head[1] <= self.__high // 2:
             block += 0
         else:
             block += 2
@@ -59,6 +59,8 @@ class Point:
                 )
 
             self.__place = [self.__xAxis, self.__yAxis]
+        
+        random_select()
 
         while self.__place in bodyCoordinate:
             random_select()

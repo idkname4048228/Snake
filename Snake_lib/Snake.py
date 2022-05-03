@@ -29,12 +29,13 @@ class Snake:
         self.__mapWidth = 10  # 地圖寬邊界
         self.__mapHigh = 10  # 地圖高邊界
 
-        self.generate_body(headCoordinate)  # 生成全身體
+        self.__generate_body()  # 生成全身體
         self.__next_body_in_protal = -1  # 預設 -1 此為身體座標之 index
         self.__pointPlace = None  # point 座標
         self.__step = 1  # snake 步數
+        self.__alive = True
 
-    def generate_body(self) -> None:  # 生成身體全部座標
+    def __generate_body(self) -> None:  # 生成身體全部座標
         body = copy.deepcopy(self.__head)
         for i in range(1, self.__long):
             # 往頭的反方向長
@@ -59,16 +60,19 @@ class Snake:
 
     # 執行相關
 
-    def get_speed(self) -> int:
+    def get_step(self) -> int:
         return self.__step
 
     def speed_up(self) -> None:  # 加速
-        if self.__step <= 5:
+        if self.__step < 5:
             self.__step += 1
 
     def speed_down(self) -> None:  # 降速
         if self.__step > 1:
-            self.step -= 1
+            self.__step -= 1
+
+    def get_direction(self) -> int:  # 回傳方向代號
+        return self.__directionMap.index(self.__direction)
 
     def change_direction(self, selectDirection: int) -> None:  # 改方向
         self.__direction = self.__directionMap[selectDirection]
@@ -80,7 +84,9 @@ class Snake:
         return False  # 沒吃到
 
     def __hitting_wall(self, head: list) -> bool:  # 撞牆壁
-        return not (0 <= head[0] < self.__mapWidth) or not (0 <= head[1] < self.__mapHigh)
+        return not (0 <= head[0] < self.__mapWidth) or not (
+            0 <= head[1] < self.__mapHigh
+        )
 
     def __hitting_body(self, head: list) -> bool:  # 撞身體
         return head in self.__bodyCoordinate[1 : self.__long : 1]
@@ -94,7 +100,9 @@ class Snake:
 
         if nextHead == self.__enterProtalPlace:  # 如果下一步在傳送門入口的話
             self.__via_protal()  # 通過 protal
-        elif self.__hitting_body or self.__hitting_wall:  # 撞牆或身體
+            if self.__alive == False:
+                return None
+        elif self.__hitting_body(nextHead) or self.__hitting_wall(nextHead):  # 撞牆或身體
             self.set_alive(False)  # 死亡
             return None  # 強行中斷
         else:
@@ -160,15 +168,23 @@ class Snake:
     def set_protal(
         self, enterProtal: list = None, exitProtal: list = None
     ) -> None:  # 設定傳送門，參數為非座標
-        self.__enterProtalPlace = self.__convert_protal_to_coordinate(
-            enterProtal, is_enter=True
-        )
-        self.__exitProtalPlace = self.__convert_protal_to_coordinate(
-            exitProtal, is_enter=False
-        )
-        self.__exitDirection = self.__directionMap[exitProtal[0]]
+
+        if enterProtal == None and exitProtal == None:
+            self.__enterProtalPlace, self.__exitProtalPlace = None, None
+            self.__exitDirection = self.__direction
+        else:
+            self.__enterProtalPlace = self.__convert_protal_to_coordinate(
+                enterProtal, is_enter=True
+            )
+            self.__exitProtalPlace = self.__convert_protal_to_coordinate(
+                exitProtal, is_enter=False
+            )
+            self.__exitDirection = self.__directionMap[exitProtal[0]]
 
     def __via_protal(self) -> None:  # 傳送
+        if self.__enterProtalPlace == None or self.__exitDirection == None:
+            self.set_alive(False)
+            return None
         self.__head = copy.deepcopy(self.__exitProtalPlace)  # 頭在出口
         self.__next_body_in_protal = 1  # 下一個在傳送門的 body index
         self.__direction = self.__exitDirection  # 改變方向
@@ -180,6 +196,8 @@ class Snake:
                 self.__next_body_in_protal == self.__long
             ):  # 如果下一個 body index 等於 long 代表傳完了
                 self.__next_body_in_protal = -1  # 改回預設值
+            if self.__enterProtalPlace == None or self.__exitProtalPlace == None:
+                self.set_alive(False)
 
     def body_in_protal(self) -> bool:  # 給 Map 使用
         return self.__next_body_in_protal != -1  # False 代表不在 protal 內
