@@ -48,6 +48,9 @@ class Snake:
         self.__width = width
         self.__high = high
 
+    def get_body(self) -> list[list]:  # 回傳身體，給 point 用
+        return self.__bodyCoordinate
+
     # 執行相關
 
     def __eat_point(self) -> bool:  # 看有沒有吃到 point ，有就刪掉 point ，並回傳 True (有吃到)

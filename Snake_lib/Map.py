@@ -2,6 +2,7 @@ import time
 import random
 from Snake_lib.Snake import Snake
 from Snake_lib.Protal import Protal
+from Snake_lib.Point import Point
 """
 Map 主要功能:
     display 展示全地圖
