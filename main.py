@@ -1,4 +1,11 @@
 """
+main 要做的事
+    Snake, Map 之間的橋樑
+    Snake 換檔
+    Snake 吃 Point 跟 Map 講
+    Snake 進 Protal 跟 Map 講
+
+
 for i in range(snake.step):
     snake.move
     if snake.have_eaten_point:

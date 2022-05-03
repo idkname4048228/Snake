@@ -45,13 +45,33 @@ class Snake:
     # Map 相關
 
     def set_boundary(self, width: int, high: int) -> None:  # 設定邊界
-        self.__width = width
-        self.__high = high
+        self.__mapWidth = width
+        self.__mapHigh = high
 
     def get_body(self) -> list[list]:  # 回傳身體，給 point 用
         return self.__bodyCoordinate
 
+    def get_long(self) -> int:  # 回傳身長
+        return self.__long
+
+    def set_point(self, point: list = None) -> None:  # 設定 Point
+        self.__pointPlace = point
+
     # 執行相關
+
+    def get_speed(self) -> int:
+        return self.__step
+
+    def speed_up(self) -> None:  # 加速
+        if self.__step <= 5:
+            self.__step += 1
+
+    def speed_down(self) -> None:  # 降速
+        if self.__step > 1:
+            self.step -= 1
+
+    def change_direction(self, selectDirection: int) -> None:  # 改方向
+        self.__direction = self.__directionMap[selectDirection]
 
     def __eat_point(self) -> bool:  # 看有沒有吃到 point ，有就刪掉 point ，並回傳 True (有吃到)
         if self.__head == self.__pointPlace:
@@ -60,9 +80,7 @@ class Snake:
         return False  # 沒吃到
 
     def __hitting_wall(self, head: list) -> bool:  # 撞牆壁
-        return not (0 <= head[0] < self.__width) or not (  # X軸
-            0 <= head[1] < self.__high
-        )  # Y軸
+        return not (0 <= head[0] < self.__mapWidth) or not (0 <= head[1] < self.__mapHigh)
 
     def __hitting_body(self, head: list) -> bool:  # 撞身體
         return head in self.__bodyCoordinate[1 : self.__long : 1]
@@ -117,10 +135,10 @@ class Snake:
                 tmp = [-1, protal[1]]
 
             elif protal[0] == 1:  # sideline為 1 時，protal[1]是x軸
-                tmp = [protal[1], self.__high]
+                tmp = [protal[1], self.__mapHigh]
 
             elif protal[0] == 2:  # sideline為 2 時，protal[1]是y軸
-                tmp = [self.__width, protal[1]]
+                tmp = [self.__mapWidth, protal[1]]
 
             elif protal[0] == 3:  # sideline為 3 時，protal[1]是x軸
                 tmp = [protal[1], -1]
@@ -129,10 +147,10 @@ class Snake:
                 tmp = [0, protal[1]]
 
             elif protal[0] == 1:  # sideline為 1 時，protal[1]是x軸
-                tmp = [protal[1], self.__high - 1]
+                tmp = [protal[1], self.__mapHigh - 1]
 
             elif protal[0] == 2:  # sideline為 2 時，protal[1]是y軸
-                tmp = [self.__width - 1, protal[1]]
+                tmp = [self.__mapWidth - 1, protal[1]]
 
             elif protal[0] == 3:  # sideline為 3 時，protal[1]是x軸
                 tmp = [protal[1], 0]
