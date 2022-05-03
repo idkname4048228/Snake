@@ -5,7 +5,9 @@ from Snake_lib.Point import Point
 
 
 class Map:
-    def __init__(self, snake: Snake = None, point: Point = None, width: int = 10, hight: int = 10):
+    def __init__(
+        self, snake: Snake = None, point: Point = None, width: int = 10, hight: int = 10
+    ):
         self.widthLimit = width
         self.hightLimit = hight
         self.middleOfWidth = self.widthLimit // 2  # 為了亂數
@@ -52,7 +54,7 @@ class Map:
     def reduce_protalTime(self):
         self.protalTime -= 1
         if self.protalTime == 0:
-            
+
             self.inProtal, self.outProtal = [-1, -1], [-1, -1]
             delay_time = random.randint(0, 5)
             time.sleep(delay_time)
@@ -63,10 +65,12 @@ class Map:
 
     def is_snake_die(self) -> None:
         headCoordinate = self.snake.coordinate[0]
-        if (headCoordinate[0] >= self.widthLimit or
-            headCoordinate[1] >= self.hightLimit or
-            headCoordinate[0] < 0 or
-                headCoordinate[1] < 0):
+        if (
+            headCoordinate[0] >= self.widthLimit
+            or headCoordinate[1] >= self.hightLimit
+            or headCoordinate[0] < 0
+            or headCoordinate[1] < 0
+        ):
             self.snake.set_alive(False)  # 死了
             print("Wall")
         elif self.snake.inProtal and self.protalTime == 0:
@@ -78,7 +82,7 @@ class Map:
         if self.snake.nextInProtal != -1:
             self.snake.nextInProtal += 1
             if self.snake.nextInProtal == self.snake.long - 1:
-                
+
                 self.snake.inProtal = False
                 self.snake.nextInProtal = -1
 
@@ -149,29 +153,38 @@ class Map:
         """
 
         self.x_axis = random.randint(
-            self.block[selectBlock][0], self.block[selectBlock][1])
+            self.block[selectBlock][0], self.block[selectBlock][1]
+        )
         self.y_axis = random.randint(
-            self.block[selectBlock][2], self.block[selectBlock][3])
+            self.block[selectBlock][2], self.block[selectBlock][3]
+        )
 
         self.pointPlace = [self.x_axis, self.y_axis]
 
-        while (self.pointPlace in self.snake.coordinate):
+        while self.pointPlace in self.snake.coordinate:
             self.x_axis = random.randint(
-                self.block[selectBlock][0], self.block[selectBlock][1])
+                self.block[selectBlock][0], self.block[selectBlock][1]
+            )
             self.y_axis = random.randint(
-                self.block[selectBlock][2], self.block[selectBlock][3])
+                self.block[selectBlock][2], self.block[selectBlock][3]
+            )
 
             self.pointPlace = [self.x_axis, self.y_axis]
 
         self.point.set_place(self.pointPlace)
 
     def block_init(self):
-        self.block = [(0, self.middleOfWidth, 0, self.middleOfHight),  # 左下
-                      (self.middleOfWidth, self.widthLimit - 1,
-                       0, self.middleOfHight),  # 右下
-                      (0, self.middleOfWidth, self.middleOfHight,
-                       self.hightLimit - 1),  # 左上
-                      (self.middleOfWidth, self.widthLimit - 1, self.middleOfHight, self.hightLimit - 1)]  # 右上
+        self.block = [
+            (0, self.middleOfWidth, 0, self.middleOfHight),  # 左下
+            (self.middleOfWidth, self.widthLimit - 1, 0, self.middleOfHight),  # 右下
+            (0, self.middleOfWidth, self.middleOfHight, self.hightLimit - 1),  # 左上
+            (
+                self.middleOfWidth,
+                self.widthLimit - 1,
+                self.middleOfHight,
+                self.hightLimit - 1,
+            ),
+        ]  # 右上
 
     def display(self):
         tmp = []
@@ -179,8 +192,8 @@ class Map:
             tmp.append([])
             for j in range(self.hightLimit):
                 tmp[i].append(0)
-        
-        if self.snake.coordinate[0] == self.pointPlace :
+
+        if self.snake.coordinate[0] == self.pointPlace:
             self.snake.eat_point()
             self.generate_point()
 
@@ -189,46 +202,53 @@ class Map:
         for i in self.snake.coordinate:
             tmp[i[0]][i[1]] = 1
 
-        print(' __', end = '')#上界線
+        print(" __", end="")  # 上界線
         for i in range(10):
-            if self.inProtal == [1, i]:#protal
-                print("(i)", end = '')
+            if self.inProtal == [1, i]:  # protal
+                print("(i)", end="")
             elif self.outProtal == [1, i]:
-                print("(o)", end = '')
+                print("(o)", end="")
             else:
-                print("___", end = '')
-        print('__ ')
+                print("___", end="")
+        print("__ ")
 
         for i in range(self.hightLimit - 1, -1, -1):
 
-            if self.inProtal == [0, i]:#左界線
-                print("(i)", end = '')#protal
+            if self.inProtal == [0, i]:  # 左界線
+                print("(i)", end="")  # protal
             elif self.outProtal == [0, i]:
-                print("(o)", end = '')
+                print("(o)", end="")
             else:
-                print(" | ", end = '')
+                print(" | ", end="")
 
             for j in range(self.widthLimit):
                 if tmp[j][i]:
-                    print(' ', tmp[j][i], sep='', end=' ')
+                    print(" ", tmp[j][i], sep="", end=" ")
                 else:
-                    print('  ', end = ' ')
+                    print("  ", end=" ")
 
             if self.inProtal == [2, i]:
-                print("(i)")#右界線
+                print("(i)")  # 右界線
             elif self.outProtal == [2, i]:
                 print("(o)")
             else:
-                print(" | ")#protal
-        
-        print(' ¯¯', end = '')#下界線
+                print(" | ")  # protal
+
+        print(" ¯¯", end="")  # 下界線
         for i in range(10):
             if self.inProtal == [3, i]:
-                print("(i)", end = '')#protal
+                print("(i)", end="")  # protal
             elif self.outProtal == [3, i]:
-                print("(o)", end = '')
+                print("(o)", end="")
             else:
-                print("¯¯¯", end = '')
-        print('¯¯ ', end = '')
+                print("¯¯¯", end="")
+        print("¯¯ ", end="")
 
-        print("protal time =", self.protalTime, '\n', self.snake.nextInProtal, self.snake.long - 1,  self.snake.inProtal)
+        print(
+            "protal time =",
+            self.protalTime,
+            "\n",
+            self.snake.nextInProtal,
+            self.snake.long - 1,
+            self.snake.inProtal,
+        )

@@ -22,7 +22,7 @@ class Snake:
             tmp[0] -= self.moveDirection[0]
             tmp[1] -= self.moveDirection[1]
             self.coordinate[i + 1] = copy.deepcopy(tmp)
-        
+
         self.lastSpace = self.coordinate[-1]
 
     def change_direction(self, direction: int):
@@ -33,13 +33,12 @@ class Snake:
         self.lastSpace = self.coordinate[-1]
         tmp = copy.deepcopy(self.coordinate[0])
         tmp[0] += self.moveDirection[0]
-        tmp[1] += self .moveDirection[1]
-        self.coordinate = [tmp] + self.coordinate[0:self.long - 1:1]
+        tmp[1] += self.moveDirection[1]
+        self.coordinate = [tmp] + self.coordinate[0 : self.long - 1 : 1]
 
     def move(self) -> None:  # 蛇移動
         for i in range(self.step):
             self.unit_move()
-
 
     def eat_point(self) -> None:  # 吃point，加長身體
         self.long += 1

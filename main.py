@@ -1,7 +1,7 @@
 import os
 import re
 import time
-import keyboard 
+import keyboard
 import threading
 
 
@@ -15,14 +15,12 @@ def main():
     testPoint = Point()
 
     testMap = Map(testSnake, testPoint)
-    
+
     direction = 0
 
     testSnake.change_direction(direction)
 
     testMap.set_protal()
-
-    step = testSnake.step
 
     def reduce_protalTime():
         while testSnake.alive:
@@ -33,7 +31,7 @@ def main():
         while testSnake.long != 30 and testSnake.alive:
             testSnake.move()
             testMap.is_snake_die()
-            if not(testSnake.alive):
+            if not (testSnake.alive):
                 break
 
             testMap.display()
@@ -47,26 +45,42 @@ def main():
 
     def change_direction_by_keyboard(pressKey):
         global direction
-        if pressKey.event_type == 'down' and pressKey.name == 'shift':
-            if testSnake.step < 5:    
+        if pressKey.event_type == "down" and pressKey.name == "shift":
+            if testSnake.step < 5:
                 testSnake.step += 1
-        elif pressKey.event_type == 'down' and pressKey.name == 'right shift':
+        elif pressKey.event_type == "down" and pressKey.name == "right shift":
             if testSnake.step > 1:
                 testSnake.step -= 1
 
-        elif pressKey.event_type == 'down' and pressKey.name == 'right' and testSnake.directionCode != 2:
+        elif (
+            pressKey.event_type == "down"
+            and pressKey.name == "right"
+            and testSnake.directionCode != 2
+        ):
             direction = 0
             testSnake.change_direction(direction)
 
-        elif pressKey.event_type == 'down' and pressKey.name == 'down' and testSnake.directionCode != 3:
+        elif (
+            pressKey.event_type == "down"
+            and pressKey.name == "down"
+            and testSnake.directionCode != 3
+        ):
             direction = 1
             testSnake.change_direction(direction)
 
-        elif pressKey.event_type == 'down' and pressKey.name == 'left' and testSnake.directionCode != 0:
+        elif (
+            pressKey.event_type == "down"
+            and pressKey.name == "left"
+            and testSnake.directionCode != 0
+        ):
             direction = 2
             testSnake.change_direction(direction)
 
-        elif pressKey.event_type == 'down' and pressKey.name == 'up' and testSnake.directionCode != 1:
+        elif (
+            pressKey.event_type == "down"
+            and pressKey.name == "up"
+            and testSnake.directionCode != 1
+        ):
             direction = 3
             testSnake.change_direction(direction)
 
@@ -74,15 +88,14 @@ def main():
 
     thread_reduce = threading.Thread(target=reduce_protalTime)  # 例項化一個執行緒物件，使執行緒執行這個函式
     thread_loop = threading.Thread(target=loop)  # 例項化一個執行緒物件，使執行緒執行這個函式
-    
+
     thread_reduce.start()
     thread_loop.start()
 
     thread_reduce.join()
     thread_loop.join()
-    
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
 
     main()
-
