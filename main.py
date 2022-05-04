@@ -67,7 +67,6 @@ def main():
             print("Death")
         return None
 
-
     def change_direction_by_keyboard(pressKey):
         global step
         if pressKey.event_type == "down" and pressKey.name == "shift":
@@ -81,28 +80,28 @@ def main():
         elif (
             pressKey.event_type == "down"
             and pressKey.name == "right"
-            and testSnake.get_direction != 2
+            and testSnake.get_direction() != 2
         ):
             testSnake.change_direction(0)
 
         elif (
             pressKey.event_type == "down"
             and pressKey.name == "down"
-            and testSnake.get_direction != 3
+            and testSnake.get_direction() != 3
         ):
             testSnake.change_direction(1)
 
         elif (
             pressKey.event_type == "down"
             and pressKey.name == "left"
-            and testSnake.get_direction != 0
+            and testSnake.get_direction() != 0
         ):
             testSnake.change_direction(2)
 
         elif (
             pressKey.event_type == "down"
             and pressKey.name == "up"
-            and testSnake.get_direction != 1
+            and testSnake.get_direction() != 1
         ):
             testSnake.change_direction(3)
 
